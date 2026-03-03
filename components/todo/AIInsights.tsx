@@ -14,7 +14,13 @@ import {
     Target,
     ArrowRight,
     Search,
-    RefreshCw
+    RefreshCw,
+    Rocket,
+    Trophy,
+    PartyPopper,
+    Flame,
+    Crown,
+    Star
 } from "lucide-react";
 import {
     BarChart,
@@ -254,14 +260,18 @@ export const AIInsights = ({ todos, todoCount, completedCount, urgentCount }: AI
                                 <div className="xl:col-span-2 pt-10 border-t border-white/5 mt-auto">
                                     <h4 className="text-[11px] font-black text-accent uppercase tracking-[0.5em] text-center mb-10 italic">STRATEGIC REALIGNMENT PROTOCOLS</h4>
                                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                                        {summaryData.recommandation.map((rec, i) => (
-                                            <div key={i} className="p-8 rounded-[3rem] bg-zinc-950/40 border border-white/20 hover:border-accent hover:bg-zinc-900/40 hover:translate-y-[-8px] hover:shadow-[0_30px_60px_-15px_rgba(168,85,247,0.3)] transition-all duration-700 h-full flex flex-col gap-6 group/rec cursor-default">
-                                                <div className="h-14 w-14 rounded-2xl bg-accent text-white flex items-center justify-center shadow-lg group-hover/rec:bg-white group-hover/rec:text-accent group-hover/rec:scale-110 group-hover/rec:rotate-12 transition-all">
-                                                    <CheckCircle2 className="h-7 w-7" />
+                                        {summaryData.recommandation.map((rec, i) => {
+                                            const Icons = [Rocket, Target, Flame, Crown, Star, PartyPopper];
+                                            const Icon = Icons[i % Icons.length];
+                                            return (
+                                                <div key={i} className="p-8 rounded-[3rem] bg-zinc-950/40 border border-white/20 hover:border-accent hover:bg-zinc-900/40 hover:translate-y-[-8px] hover:shadow-[0_30px_60px_-15px_rgba(168,85,247,0.3)] transition-all duration-700 h-full flex flex-col gap-6 group/rec cursor-default">
+                                                    <div className="h-14 w-14 rounded-2xl bg-accent text-white flex items-center justify-center shadow-lg group-hover/rec:bg-white group-hover/rec:text-accent group-hover/rec:scale-110 group-hover/rec:rotate-12 transition-all">
+                                                        <Icon className="h-7 w-7" />
+                                                    </div>
+                                                    <p className="text-[16px] font-black text-white leading-tight tracking-tight italic">"{rec}"</p>
                                                 </div>
-                                                <p className="text-[16px] font-black text-white leading-tight tracking-tight italic">"{rec}"</p>
-                                            </div>
-                                        ))}
+                                            );
+                                        })}
                                     </div>
                                 </div>
                             </div>
@@ -314,7 +324,7 @@ export const AIInsights = ({ todos, todoCount, completedCount, urgentCount }: AI
                         <div className="flex items-center justify-between mb-16 relative z-10">
                             <div>
                                 <p className="text-[12px] font-black text-accent uppercase tracking-[0.5em] mb-2 font-black">CHRONOMETRY</p>
-                                <p className="text-[10px] font-black text-zinc-500 uppercase tracking-[0.2em] opacity-40 italic">Density Metrics</p>
+                                <p className="text-[10px] font-black text-zinc-500 uppercase tracking-[0.2em] opacity-40 italic">시간별 생산성 패턴</p>
                             </div>
                             <div className="h-16 w-16 rounded-[2rem] bg-accent/10 border border-accent/20 flex items-center justify-center shadow-inner group-hover/density:scale-110 group-hover/density:rotate-[-12deg] transition-all duration-700">
                                 <Clock className="h-8 w-8 text-accent animate-spin-slow" />
@@ -322,14 +332,14 @@ export const AIInsights = ({ todos, todoCount, completedCount, urgentCount }: AI
                         </div>
 
                         {/* High-Fidelity Histogram */}
-                        <div className="flex items-end justify-between gap-4 h-64 mb-16 relative px-4 z-10">
+                        <div className="flex items-end justify-between gap-2 h-64 mb-16 relative px-2 z-10">
                             {/* Background Grid Lines */}
-                            <div className="absolute inset-0 px-4 flex flex-col justify-between py-2 opacity-[0.05] pointer-events-none">
+                            <div className="absolute inset-0 px-2 flex flex-col justify-between py-2 opacity-[0.05] pointer-events-none">
                                 {[1, 2, 3, 4, 5].map(l => <div key={l} className="w-full border-t border-accent" />)}
                             </div>
-                            {[45, 80, 55, 95, 70, 40].map((h, i) => (
-                                <div key={i} className="flex-1 flex flex-col items-center gap-6 h-full justify-end group/bar relative">
-                                    <div className="w-full bg-zinc-800/40 rounded-full relative flex items-end justify-center h-full overflow-hidden border border-white/20 transition-all group-hover/bar:bg-accent/30 shadow-inner">
+                            {[65, 45, 80, 55, 95, 70, 40].map((h, i) => (
+                                <div key={i} className="flex-1 flex flex-col items-center gap-4 h-full justify-end group/bar relative">
+                                    <div className="w-full max-w-[32px] xl:max-w-[40px] bg-zinc-800/40 rounded-full relative flex items-end justify-center h-full overflow-hidden border border-white/20 transition-all group-hover/bar:bg-accent/30 shadow-inner">
                                         <div
                                             className="w-full bg-accent/40 rounded-full group-hover/bar:bg-accent group-hover/bar:h-full transition-all duration-1000 cursor-none relative"
                                             style={{ height: `${h}%` }}
@@ -337,14 +347,16 @@ export const AIInsights = ({ todos, todoCount, completedCount, urgentCount }: AI
                                             <div className="absolute top-0 left-0 w-full h-[60%] bg-gradient-to-b from-white/30 to-transparent group-hover/bar:opacity-100 transition-opacity" />
                                         </div>
                                     </div>
-                                    <span className="text-[10px] font-black text-zinc-600 uppercase group-hover/bar:text-accent group-hover/bar:scale-150 transition-all duration-500 font-mono tracking-tighter">{i * 4}H</span>
+                                    <span className="text-[11px] font-black text-zinc-600 group-hover/bar:text-accent group-hover/bar:scale-125 transition-all duration-500 font-sans tracking-tighter">
+                                        {["월", "화", "수", "목", "금", "토", "일"][i]}
+                                    </span>
                                 </div>
                             ))}
                         </div>
 
                         <div className="p-10 rounded-[3rem] bg-accent/5 border border-accent/20 mt-auto transition-all group-hover/density:bg-accent/10 group-hover/density:shadow-[0_0_40px_rgba(168,85,247,0.2)] group-hover/density:border-accent flex items-center justify-center relative z-10">
                             <p className="text-[14px] font-bold text-zinc-400 leading-relaxed italic text-center tracking-tight">
-                                "Optimal synaptic window detected at <span className="text-accent font-black">12PM - 4PM</span>. Reserve this for high-complexity cognition."
+                                "집중력이 가장 높은 골든 타임은 <span className="text-accent font-black">오후 12시 - 4시</span>입니다. 이 시간대에는 가장 복잡한 업무를 우선 처리하세요."
                             </p>
                         </div>
                     </Card>
