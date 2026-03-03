@@ -96,7 +96,7 @@ const LoginPage = () => {
                     <CardHeader className="space-y-2 pb-8">
                         <CardTitle className="text-3xl font-black tracking-tight text-white uppercase">SIGN IN</CardTitle>
                         <CardDescription className="text-zinc-500 font-medium">
-                            Access your intelligent workspace to review today's insights.
+                            오늘의 인사이트를 확인하고 스마트하게 하루를 관리하세요.
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
