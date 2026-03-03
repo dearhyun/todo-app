@@ -218,57 +218,91 @@ export const Dashboard = () => {
             <AIInsights todos={todos} todoCount={stats.total} completedCount={stats.completed} urgentCount={stats.urgent} />
 
             {/* Productivity Toolbar */}
-            <div className="sticky top-20 z-40 flex flex-col lg:flex-row gap-4 bg-background/60 dark:bg-zinc-950/40 p-5 rounded-[2.5rem] border-2 border-accent/20 dark:border-white/10 shadow-3xl backdrop-blur-3xl transition-all">
-                <div className="relative flex-1">
-                    <Search className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 text-accent" />
-                    <Input placeholder="Search tasks, projects, insights..." className="pl-14 h-12 bg-transparent border-none focus-visible:ring-0 text-lg placeholder:text-muted-foreground/40 transition-all font-medium" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
+            <div className="sticky top-20 z-40 flex flex-col lg:flex-row gap-6 bg-zinc-900/40 dark:bg-black/40 p-6 sm:p-8 rounded-[3.5rem] border border-white/20 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.5)] backdrop-blur-3xl ring-1 ring-inset ring-white/[0.05] hover:border-accent/40 transition-all">
+                <div className="relative flex-1 group">
+                    <div className="absolute inset-y-0 left-6 flex items-center pointer-events-none">
+                        <Search className="h-6 w-6 text-accent group-focus-within:text-white transition-colors" />
+                    </div>
+                    <Input
+                        placeholder="SEARCH TASKS, PROJECTS, INSIGHTS..."
+                        className="pl-16 h-16 bg-black/30 border-white/10 dark:border-white/20 rounded-[2.25rem] focus-visible:ring-accent/40 focus-visible:border-accent text-lg placeholder:text-zinc-600 font-black tracking-tighter transition-all hover:bg-black/50 hover:border-accent/50"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                    />
                 </div>
 
-                <div className="grid grid-cols-2 sm:flex items-center gap-3">
-                    <div className="hidden sm:flex gap-3">
+                <div className="flex flex-wrap items-center gap-4">
+                    <div className="flex items-center gap-3">
                         <Select value={filterStatus} onValueChange={setFilterStatus}>
-                            <SelectTrigger className="h-12 w-[160px] bg-secondary/50 dark:bg-zinc-900/40 border-accent/10 rounded-2xl text-xs font-bold uppercase tracking-wider"><SelectValue placeholder="Status" /></SelectTrigger>
-                            <SelectContent className="rounded-2xl border-border/50 dark:border-white/5 bg-background dark:bg-zinc-950 backdrop-blur-2xl">
-                                <SelectItem value="all">전체 (ALL)</SelectItem>
-                                <SelectItem value="todo">계획 (TODO)</SelectItem>
-                                <SelectItem value="in_progress">진행중 (IN PROGRESS)</SelectItem>
-                                <SelectItem value="todo+in_progress">계획+진행중</SelectItem>
-                                <SelectItem value="done">완료 (DONE)</SelectItem>
+                            <SelectTrigger className="h-16 px-8 bg-black/30 dark:bg-zinc-950/40 border-white/20 rounded-[2.25rem] text-[11px] font-black uppercase tracking-[0.2em] min-w-[180px] hover:bg-black/50 hover:border-accent transition-all focus:ring-accent/40">
+                                <SelectValue placeholder="STATUS" />
+                            </SelectTrigger>
+                            <SelectContent className="rounded-[2rem] border-white/10 bg-zinc-950/90 backdrop-blur-3xl shadow-3xl p-2 min-w-[220px]">
+                                {[
+                                    { value: "all", label: "전체(ALL)" },
+                                    { value: "todo", label: "계획(TODO)" },
+                                    { value: "in_progress", label: "진행중(IN PROGRESS)" },
+                                    { value: "todo+in_progress", label: "계획+진행중" },
+                                    { value: "done", label: "완료(DONE)" }
+                                ].map((s) => (
+                                    <SelectItem key={s.value} value={s.value} className="rounded-2xl py-4 px-6 text-[11px] font-black uppercase tracking-widest focus:bg-accent focus:text-white transition-all mb-1 last:mb-0">
+                                        {s.label}
+                                    </SelectItem>
+                                ))}
                             </SelectContent>
                         </Select>
 
                         <Select value={filterPriority} onValueChange={setFilterPriority}>
-                            <SelectTrigger className="h-12 w-[140px] bg-secondary/50 dark:bg-zinc-900/40 border-accent/10 rounded-2xl text-xs font-bold uppercase tracking-wider"><SelectValue placeholder="Priority" /></SelectTrigger>
-                            <SelectContent className="rounded-2xl border-border/50 dark:border-white/5 bg-background dark:bg-zinc-950 backdrop-blur-2xl">
-                                <SelectItem value="all">ALL PRIORITY</SelectItem>
-                                <SelectItem value="low">LOW</SelectItem>
-                                <SelectItem value="medium">MEDIUM</SelectItem>
-                                <SelectItem value="high">HIGH</SelectItem>
-                                <SelectItem value="urgent">URGENT</SelectItem>
+                            <SelectTrigger className="h-16 px-8 bg-black/20 dark:bg-zinc-950/40 border-white/5 rounded-[2.25rem] text-[11px] font-black uppercase tracking-[0.2em] min-w-[160px] hover:bg-black/40 transition-all focus:ring-accent/40">
+                                <SelectValue placeholder="PRIORITY" />
+                            </SelectTrigger>
+                            <SelectContent className="rounded-[2rem] border-white/10 bg-zinc-950/90 backdrop-blur-3xl shadow-3xl p-2 min-w-[180px]">
+                                {["all", "low", "medium", "high", "urgent"].map((p) => (
+                                    <SelectItem key={p} value={p} className="rounded-2xl py-4 px-6 text-[11px] font-black uppercase tracking-widest focus:bg-accent focus:text-white transition-all mb-1 last:mb-0">
+                                        {p === "all" ? "ALL PRIORITY" : p.toUpperCase()}
+                                    </SelectItem>
+                                ))}
                             </SelectContent>
                         </Select>
                     </div>
 
-                    <div className="flex items-center gap-2 bg-accent/10 p-1.5 px-3 rounded-2xl border border-accent/20 col-span-2 sm:col-auto">
-                        <span className="text-[10px] font-black text-accent whitespace-nowrap hidden md:inline ml-1 uppercase">Sort By:</span>
+                    <div className="h-16 flex items-center gap-2 bg-black/20 p-2 rounded-[2.25rem] border border-white/5">
                         <Select value={sortBy} onValueChange={setSortBy}>
-                            <SelectTrigger className="h-9 w-full sm:w-[130px] bg-transparent border-none focus:ring-0 shadow-none text-xs font-black p-0 px-2 uppercase tracking-tight">
-                                <SelectValue placeholder="Sort" />
+                            <SelectTrigger className="h-full px-6 bg-transparent border-none focus:ring-0 shadow-none text-[10px] font-black uppercase tracking-[0.3em] min-w-[130px]">
+                                <SelectValue placeholder="SORT" />
                             </SelectTrigger>
-                            <SelectContent className="rounded-2xl border-border/50 dark:border-white/5 bg-background dark:bg-zinc-950 backdrop-blur-2xl">
-                                <SelectItem value="created_at">LATEST</SelectItem>
-                                <SelectItem value="due_date">DEADLINE</SelectItem>
-                                <SelectItem value="priority">PRIORITY</SelectItem>
-                                <SelectItem value="title">NAME</SelectItem>
+                            <SelectContent className="rounded-[2rem] border-white/10 bg-zinc-950/90 backdrop-blur-3xl shadow-3xl p-2">
+                                {[
+                                    { value: "created_at", label: "LATEST" },
+                                    { value: "due_date", label: "DEADLINE" },
+                                    { value: "priority", label: "PRIORITY" },
+                                    { value: "title", label: "NAME" }
+                                ].map((s) => (
+                                    <SelectItem key={s.value} value={s.value} className="rounded-2xl py-4 px-6 text-[11px] font-black uppercase tracking-widest focus:bg-accent focus:text-white transition-all mb-1 last:mb-0">
+                                        {s.label}
+                                    </SelectItem>
+                                ))}
                             </SelectContent>
                         </Select>
-                        <Button variant="ghost" size="icon" onClick={() => setSortOrder(prev => prev === "asc" ? "desc" : "asc")} className="h-9 w-9 rounded-xl hover:bg-primary/10 text-primary transition-all border border-zinc-200/50 dark:border-zinc-700/50 ml-1">
-                            {sortOrder === "asc" ? <ArrowUpWideNarrow className="h-4 w-4" /> : <ArrowDownWideNarrow className="h-4 w-4" />}
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => setSortOrder(prev => prev === "asc" ? "desc" : "asc")}
+                            className="h-12 w-12 rounded-2xl bg-white/5 hover:bg-accent hover:text-white transition-all shadow-lg"
+                        >
+                            {sortOrder === "asc" ? <ArrowUpWideNarrow className="h-5 w-5" /> : <ArrowDownWideNarrow className="h-5 w-5" />}
                         </Button>
                     </div>
 
                     {(filterStatus !== "all" || filterPriority !== "all" || searchQuery !== "" || sortBy !== "created_at" || sortOrder !== "desc") && (
-                        <Button variant="ghost" size="icon" onClick={() => { setSearchQuery(""); setFilterStatus("all"); setFilterPriority("all"); setSortBy("created_at"); setSortOrder("desc"); }} className="h-12 w-12 text-muted-foreground hover:text-primary transition-all rounded-full hover:bg-primary/10"><FilterX className="h-6 w-6" /></Button>
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => { setSearchQuery(""); setFilterStatus("all"); setFilterPriority("all"); setSortBy("created_at"); setSortOrder("desc"); }}
+                            className="h-16 w-16 text-zinc-500 hover:text-red-400 dark:hover:text-red-400 hover:bg-red-400/10 transition-all rounded-[2.25rem] border border-white/5"
+                        >
+                            <FilterX className="h-7 w-7" />
+                        </Button>
                     )}
                 </div>
             </div>
