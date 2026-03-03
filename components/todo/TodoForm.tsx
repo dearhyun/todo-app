@@ -1,3 +1,6 @@
+// 할 일 추가 및 수정을 위한 폼 컴포넌트입니다. AI를 통한 자연어 분석 및 자동 필드 입력 기능을 포함합니다.
+"use client";
+
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -89,14 +92,33 @@ export const TodoForm = ({ initialData, onSubmit, isLoading }: TodoFormProps) =>
 
             const data = await response.json();
 
-            // AI가 추출한 필드로 폼 업데이트
-            form.setValue("title", data.title);
-            if (data.due_date) form.setValue("due_date", data.due_date);
-            if (data.due_time) form.setValue("due_time", data.due_time);
-            if (data.priority) form.setValue("priority", data.priority);
-            if (data.category) form.setValue("category", data.category);
+            // AI가 여러 개의 할 일을 추출한 경우(배열)와 단일 항목인 경우를 모두 처리
+            const tasks = Array.isArray(data) ? data : [data];
 
-            toast.success("AI가 할 일을 똑똑하게 분석했습니다!");
+            if (tasks.length > 1) {
+                // 여러 개인 경우 바로 DB에 인서트 요청 (Dashboard의 로직 활용)
+                for (const task of tasks) {
+                    await onSubmit({
+                        title: task.title,
+                        description: "",
+                        due_date: task.due_date || "",
+                        due_time: task.due_time || "09:00",
+                        priority: task.priority || "medium",
+                        category: task.category || "",
+                        status: "todo",
+                        assignee: "",
+                    });
+                }
+                toast.success(`AI가 ${tasks.length}개의 할 일을 각각 생성했습니다!`);
+            } else {
+                // 1개인 경우 기존처럼 폼에 채워넣음
+                form.setValue("title", tasks[0].title);
+                if (tasks[0].due_date) form.setValue("due_date", tasks[0].due_date);
+                if (tasks[0].due_time) form.setValue("due_time", tasks[0].due_time);
+                if (tasks[0].priority) form.setValue("priority", tasks[0].priority);
+                if (tasks[0].category) form.setValue("category", tasks[0].category);
+                toast.success("AI가 할 일을 똑똑하게 분석했습니다!");
+            }
             setAiInput(""); // 초기화
         } catch (error: any) {
             console.error("AI 파싱 실패:", error);
@@ -155,7 +177,13 @@ export const TodoForm = ({ initialData, onSubmit, isLoading }: TodoFormProps) =>
                             <FormItem>
                                 <FormLabel className="text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">제목</FormLabel>
                                 <FormControl>
-                                    <Input placeholder="할 일을 입력하세요" {...field} disabled={isLoading} className="h-12 border-zinc-200/60 dark:border-zinc-800/60 rounded-xl" />
+                                    <Input
+                                        placeholder="할 일을 입력하세요"
+                                        {...field}
+                                        autoFocus
+                                        disabled={isLoading}
+                                        className="h-12 border-zinc-200/60 dark:border-zinc-800/60 rounded-xl"
+                                    />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -287,6 +315,13 @@ export const TodoForm = ({ initialData, onSubmit, isLoading }: TodoFormProps) =>
                         type="submit"
                         className="w-full h-14 text-lg font-black bg-gradient-to-r from-accent to-accent/80 text-white shadow-[0_0_15px_rgba(168,85,247,0.3)] hover:shadow-[0_0_25px_rgba(168,85,247,0.5)] transition-all hover:scale-[1.02] active:scale-95 rounded-2xl border-none mt-6"
                         disabled={isLoading || isAiProcessing}
+                        onClick={(e) => {
+                            // 제목이 비어있고 AI 입력창에 내용은 있는 경우, 일반 submit 대신 AI 분석 실행
+                            if (!form.getValues("title") && aiInput.trim() && !initialData) {
+                                e.preventDefault();
+                                handleAiParse();
+                            }
+                        }}
                     >
                         {isLoading ? (
                             <>

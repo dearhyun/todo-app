@@ -1,3 +1,6 @@
+// AI를 활용하여 할 일 데이터를 분석하고 전략적 인사이트 및 통계 대시보드를 제공하는 컴포넌트입니다.
+"use client";
+
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -313,7 +316,7 @@ export const AIInsights = ({ todos, todoCount, completedCount, urgentCount }: AI
                                 <div className="h-full bg-white rounded-full transition-all duration-2000 ease-out shadow-[0_0_25px_rgba(255,255,255,1)]" style={{ width: `${completionRate}%` }} />
                             </div>
                             <div className="flex justify-between items-center text-[12px] font-black uppercase tracking-[0.3em] italic">
-                                <span className="opacity-80 font-black">{completionRate > 80 ? "巅峰状态 / APEX" : "势不可挡 / SURGING"}</span>
+                                <span className="opacity-80 font-black">{completionRate > 80 ? "최상의 성과 / PEAK" : "상승 기류 / SURGING"}</span>
                                 <span className="text-white/60">{completedCount} / {todoCount} Units</span>
                             </div>
                         </div>

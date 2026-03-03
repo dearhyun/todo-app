@@ -1,3 +1,4 @@
+// 사용자 인터페이스의 테마(다크/라이트)를 토글할 수 있는 스위치 버튼 컴포넌트입니다.
 "use client";
 
 import * as React from "react";

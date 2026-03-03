@@ -1,3 +1,6 @@
+// 할 일 목록을 그리드 레이아웃으로 표시하고 각 항목의 상태 변경 및 삭제 요청을 처리하는 컴포넌트입니다.
+"use client";
+
 import { Todo, Priority } from "@/lib/types/todo";
 import { TodoCard } from "./TodoCard";
 import { Skeleton } from "@/components/ui/skeleton";

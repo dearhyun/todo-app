@@ -1,3 +1,6 @@
+// 할 일 관리 대시보드 컴포넌트입니다. 업무 필터링, 검색, 상태 관리 및 AI 인사이트와의 상호작용을 담당합니다.
+"use client";
+
 import { useEffect, useState, useCallback } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { Todo, TodoStatus, Priority } from "@/lib/types/todo";
@@ -317,7 +320,7 @@ export const Dashboard = () => {
                 <DialogContent className="sm:max-w-[550px] p-0 overflow-hidden border-none rounded-[2.5rem] bg-white/80 dark:bg-zinc-950/80 backdrop-blur-3xl shadow-2xl">
                     <div className="p-8">
                         <DialogHeader className="mb-6"><DialogTitle className="text-3xl font-black flex items-center gap-3"><div className="h-10 w-10 rounded-2xl bg-accent/20 flex items-center justify-center text-accent"><Plus className="h-6 w-6" /></div>{editingTodo ? "EDIT TASK" : "DEFINE NEW TASK"}</DialogTitle></DialogHeader>
-                        <TodoForm initialData={editingTodo || undefined} onSubmit={handleTodoSubmit} isLoading={isSubmitting} />
+                        <TodoForm key={editingTodo?.id || "new"} initialData={editingTodo || undefined} onSubmit={handleTodoSubmit} isLoading={isSubmitting} />
                     </div>
                 </DialogContent>
             </Dialog>

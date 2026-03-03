@@ -1,3 +1,6 @@
+// 개별 할 일을 고품질 디자인의 카드 형태로 표시하며, 우선순위 조절 및 상태 토글 기능을 상호작용 가능한 형태로 제공합니다.
+"use client";
+
 import { Todo, Priority } from "@/lib/types/todo";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
